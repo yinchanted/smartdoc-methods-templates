@@ -1096,7 +1096,21 @@ Helper variables:
                     $("#schema_info .nav-tabs .smartdocs_error_section-tab a").click();
                 }
             }
-
-})(jQuery);
+        Drupal.behaviors.exampleModule = {
+        attach: function (context, settings) {
+          // Code to be run on page load, and
+          // on ajax load added here
+          $('.panel-heading').bind('click', function() {
+            $(this).parent().find(".panel-collapse").toggle();
+            if ($(this).find("i").hasClass('glyphicon-chevron-right')) {
+              $(this).find("i").removeClass("glyphicon-chevron-right");
+              $(this).find("i").addClass("glyphicon-chevron-down");
+            } else {
+              $(this).find("i").removeClass("glyphicon-chevron-down");
+              $(this).find("i").addClass("glyphicon-chevron-right");
+            }
+          });
+        }
+      };})(jQuery);
 </script>
 </div>
