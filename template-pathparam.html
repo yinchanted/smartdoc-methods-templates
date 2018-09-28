@@ -139,7 +139,7 @@ Helper variables:
                                 </p>
                             </div>
                             <!--/.resource_details -->
-                            <p style="color:red;">Path parameter is required! Hover over to see detail</p>
+                            <p style="color:red;font-weight:200">Note: Path parameter is required! Hover over to see detail.</p>
                         </div>
                     </div>
                 </div>
@@ -248,8 +248,10 @@ Helper variables:
                             </td>
                         </tr>
                         {{/header-list}}
+                        <tr><td colspan="3">
+                          <p style="font-weight:200;color:red">Note: The pre-filled x-api-key is an anonymous key that is rate limited.</p></td>
+                        </tr>
                         </tbody>
-                       <p style="font-weight:200;">Note: The pre-filled anonymous API key has a rate limit</p>
                     </table>
                   </div>
                 </div>
@@ -495,60 +497,6 @@ Helper variables:
 </div><!--/.col-sm-12 -->
 </div><!-- #method_content -->
 <div class="col-sm-4">
-    <div class="well well-sm">
-        <div class="table-responsive">
-            <table class="table table-condensed table-resource-summary">
-                <div class="resource_summary">
-                    <thead>
-                    <tr>
-                        <td colspan="2">
-                            <h4>Resource Summary</h4>
-                        </td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="authType">
-                        <td>
-                            <p class="title">Security</p>
-                        </td>
-                        <td>
-                            <p class="data auth_type" data-role="auth-type"></p>
-                        </td>
-                    </tr>
-                    {{!-- Only output Content Type if it exists, but make
-                         sure to check both body.contentType and parameters.
-                    --}}
-                    {{#if body.contentType}}
-                    <tr>
-                        <td>
-                            <p class="title">Content Type</p>
-                        </td>
-                        <td>
-                            <p class="data content-type-source-body" data-role="content-type">
-                                {{body.contentType}}
-                            </p>
-                        </td>
-                    </tr>
-                    {{/if}}
-                    {{!-- Only output Category if it exists --}}
-                    {{#if tags}}
-                        <tr>
-                            <td>
-                                <p class="title">Category</p>
-                            </td>
-                            <td>
-                                <p class="data" data-role="category">
-                                    {{#each tags}}{{.}}{{#unless @last}}, {{/unless}}{{/each}}
-                                </p>
-                            </td>
-                        </tr>
-                    {{/if}}
-                    </tbody>
-                </div><!--/.resource_summary -->
-            </table>
-        </div>
-        <!-- Resource summary - right side info section -->
-    </div>
     {{#response}}
     {{#if errors}}
     <div class="well well-sm">
@@ -556,7 +504,7 @@ Helper variables:
         <div class="error_codes">
             <thead>
             <tr>
-                <td colspan="4">
+                <td colspan="12">
                     <h4>Resource Error Codes</h4>
                 </td>
             </tr>
@@ -594,65 +542,6 @@ Helper variables:
     {{/if}}
     {{/response}}
 </div>
-
-<div class="col-sm-4" id="schema_info">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active smartdocs_request_section-tab">
-            <a href="#smartdocs_request_section" aria-controls="home" role="tab" data-toggle="tab">Request</a>
-        </li>
-        <li role="presentation" class="smartdocs_response_section-tab">
-            <a href="#smartdocs_response_section" aria-controls="home" role="tab" data-toggle="tab">Response</a>
-        </li>
-        <!--
-        <li role="presentation" class="smartdocs_error_section-tab">
-            <a href="#smartdocs_error_section" aria-controls="home" role="tab" data-toggle="tab">Errors</a>
-        </li>
-        -->
-    </ul>
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="smartdocs_request_section">
-            <table class='table well'>
-                <thead>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="smartdocs_response_section">
-            <table class='table well'>
-                <thead>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <!--
-        <div role="tabpanel" class="tab-pane" id="smartdocs_error_section">
-            <div class="well">
-<pre>
-{
-  "code": "&lt;error code&gt;",
-  "message": "&lt;error message&gt;",
-  "info": "&lt;url to error  page&gt;",
-  "detail": "&lt;error details&gt;"
-}
-</pre>
-
-<a href="/docs/errors">Please visit our error page for additional information <br/>https://developer.client.com/docs/errors</a>
-
-
-            </div>
-        </div>
-        -->
-    </div>
-</div>
-
 <div id="working_alert">
     <p>Working...</p>
 </div>
@@ -885,20 +774,6 @@ Helper variables:
         }
     }
 
-    console.log("response.schema: " + JSON.stringify({{response.schema}}));
-	var responseSchema = JSON.stringify({{response.schema}});
-	console.log(responseSchema);
-	var myMatch = responseSchema.match(/\/camt\.\w+\.\w+.\w+\\/g);
-	console.log(myMatch);
-	var finalMatch = myMatch[0].substring(1, myMatch[0].length-1);
-	console.log(finalMatch);
-
-    {{#if response.schema.dataType}}
-
-		var _response_data_type = finalMatch;
-        Apigee.APIModel.responseSchemaName = _response_data_type;
-		console.log("responseSchemaName: " + Apigee.APIModel.responseSchemaName);
-	{{/if}}
     // -------------------------------------------------------------------------
     // SECURITY
     // -------------------------------------------------------------------------
@@ -1043,59 +918,23 @@ Helper variables:
         }
     }
 
-(function ($) {
-            _flatten_object = function (obj, prefix){
-                prefix = prefix || '';
-                $arr = {};
-                for(var i in obj){
-                    if(obj[i].type == 'object'){
-                        $arr = $.extend($arr, _flatten_object(obj[i].properties, prefix + i + '.'));
-                    } else if(obj[i].type == 'array'){
-                        $arr[prefix + i] = obj[i];
-                        $arr = $.extend($arr, _flatten_object(obj[i].items.properties, prefix + i + '[].'));
-                    } else {
-                        $arr[prefix + i] = obj[i];
-                    }
-                }
-                return $arr;
-            };
-            if(Apigee.APIModel.resourceName) {
-                $("#smartdocs_request_section tbody:not(.schemas-smartdocs-processed)").addClass("schemas-smartdocs-processed").each(function(){
-                    $this = $(this);
-                    $_schema = originalSchemaObj[Apigee.APIModel.resourceName].properties;
-                    $_schema_arr = _flatten_object($_schema);
-                    for(i in $_schema_arr){
-                        $this.append("<tr>" +
-                                        "<td>" + i.split("."). join("<br/> .") + "</td>" +
-                                        "<td>" + $_schema_arr[i].type + "</td>" +
-                                        "<td>" + ($_schema_arr[i].description ? $_schema_arr[i].description : "") + "</td>" +
-                                    "</tr>");
-                    }
-                });
+    (function ($) {
+      Drupal.behaviors.exampleModule = {
+        attach: function (context, settings) {
+          // Code to be run on page load, and
+          // on ajax load added here
+          $('.panel-heading').bind('click', function() {
+            $(this).parent().find(".panel-collapse").toggle();
+            if ($(this).find("i").hasClass('glyphicon-chevron-right')) {
+              $(this).find("i").removeClass("glyphicon-chevron-right");
+              $(this).find("i").addClass("glyphicon-chevron-down");
             } else {
-                $("#schema_info .nav-tabs .smartdocs_request_section-tab").removeClass("active").hide();
-                $("#schema_info .nav-tabs .smartdocs_response_section-tab a").click();
+              $(this).find("i").removeClass("glyphicon-chevron-down");
+              $(this).find("i").addClass("glyphicon-chevron-right");
             }
-            if(Apigee.APIModel.responseSchemaName) {
-                $("#smartdocs_response_section tbody:not(.schemas-smartdocs-processed)").addClass("schemas-smartdocs-processed").each(function(){
-                    $this = $(this);
-                    $_schema = originalSchemaObj[Apigee.APIModel.responseSchemaName].properties;
-                    $_schema_arr = _flatten_object($_schema);
-                    for(i in $_schema_arr){
-                        $this.append("<tr>" +
-                            "<td>" + i.split("."). join("<br/> .") + "</td>" +
-                            "<td>" + $_schema_arr[i].type + "</td>" +
-                            "<td>" + ($_schema_arr[i].description ? $_schema_arr[i].description : "") + "</td>" +
-                            "</tr>");
-                    }
-                });
-            } else {
-                if($("#schema_info .nav-tabs .smartdocs_response_section-tab.active")){
-                    $("#schema_info .nav-tabs .smartdocs_response_section-tab").removeClass("active").hide();
-                    $("#schema_info .nav-tabs .smartdocs_error_section-tab a").click();
-                }
-            }
-
-})(jQuery);
+          });
+        }
+      };
+    }(jQuery));
 </script>
 </div>
